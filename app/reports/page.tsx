@@ -1,14 +1,33 @@
-// app/reports/page.jsx
-import Layout from "@/components/Layout";
+// app/reports/page.tsx
+import Layout from "../components/layout";
+import React from "react"; // Import React for component typing
+import { IconType } from "react-icons"; // Type for icons
 import {
   FiDownload,
   FiBarChart2,
   FiFileText,
   FiCalendar,
+  FiDollarSign,
+  FiZap,
 } from "react-icons/fi";
-import { MdInsertDriveFile, MdAccessTime } from "react-icons/md";
+import { MdInsertDriveFile, MdAccessTime, MdOutlineWork } from "react-icons/md"; // Added missing MdOutlineWork
 
-const ReportMetricCard = ({ title, value, unit, icon: Icon, colorClass }) => (
+// --- 1. Define Prop Types for ReportMetricCard ---
+interface ReportMetricCardProps {
+  title: string;
+  value: string;
+  unit?: string; // unit is optional in one case
+  icon: IconType; // IconType is the correct type for react-icons components
+  colorClass: string;
+}
+
+const ReportMetricCard: React.FC<ReportMetricCardProps> = ({
+  title,
+  value,
+  unit,
+  icon: Icon,
+  colorClass,
+}) => (
   <div className="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between border-l-4 border-gray-100">
     <div className="flex items-center justify-between mb-2">
       <p className="text-sm font-medium text-gray-500">{title}</p>
@@ -23,7 +42,22 @@ const ReportMetricCard = ({ title, value, unit, icon: Icon, colorClass }) => (
   </div>
 );
 
-const ReportItem = ({ title, summary, generated, size, format }) => (
+// --- 2. Define Prop Types for ReportItem ---
+interface ReportItemProps {
+  title: string;
+  summary: string;
+  generated: string;
+  size: string;
+  format: string;
+}
+
+const ReportItem: React.FC<ReportItemProps> = ({
+  title,
+  summary,
+  generated,
+  size,
+  format,
+}) => (
   <div className="flex justify-between items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
     <div>
       <div className="flex items-center space-x-2 mb-1">
@@ -48,7 +82,18 @@ const ReportItem = ({ title, summary, generated, size, format }) => (
   </div>
 );
 
-const ActivityItem = ({ description, time, user }) => (
+// --- 3. Define Prop Types for ActivityItem ---
+interface ActivityItemProps {
+  description: string;
+  time: string;
+  user: string;
+}
+
+const ActivityItem: React.FC<ActivityItemProps> = ({
+  description,
+  time,
+  user,
+}) => (
   <div className="flex items-start space-x-3 py-2 border-b last:border-b-0 border-gray-100">
     <MdAccessTime className="w-5 h-5 text-gray-400 mt-1" />
     <div>
@@ -60,8 +105,11 @@ const ActivityItem = ({ description, time, user }) => (
   </div>
 );
 
+// --- 4. Main Page Component ---
+// Note: This is a Server Component by default in Next.js 13+ App Router
 export default function ReportsPage() {
-  const reports = [
+  const reports: ReportItemProps[] = [
+    // Added type for the reports array
     {
       title: "Executive Summary Report",
       summary: "High-level overview of all operations and key metrics",
@@ -86,6 +134,7 @@ export default function ReportsPage() {
   ];
 
   return (
+    // Assuming Layout component is correctly typed
     <Layout title="Executive Reports">
       <h2 className="text-xl font-semibold mb-6 text-gray-700">
         Strategic overview, financial summaries, and executive dashboards
@@ -102,7 +151,7 @@ export default function ReportsPage() {
         <ReportMetricCard
           title="Departments Managed"
           value="12"
-          icon={MdOutlineWork}
+          icon={MdOutlineWork} // Correctly imported MdOutlineWork
           colorClass="text-blue-500"
         />
         <ReportMetricCard

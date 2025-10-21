@@ -1,5 +1,7 @@
-// app/dashboard/page.jsx
-import Layout from "@/components/Layout";
+// app/dashboard/page.tsx
+import Layout from "../components/layout";
+import React from "react"; // Import React for component typing
+import { IconType } from "react-icons"; // Type for react-icons
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import {
   MdMonetizationOn,
@@ -8,7 +10,22 @@ import {
   MdPeople,
 } from "react-icons/md";
 
-const MetricCard = ({ title, value, change, icon: Icon, color }) => (
+// --- 1. Define Prop Types for MetricCard ---
+interface MetricCardProps {
+  title: string;
+  value: string;
+  change: string;
+  icon: IconType; // Type for the icon component
+  color: string;
+}
+
+const MetricCard: React.FC<MetricCardProps> = ({
+  title,
+  value,
+  change,
+  icon: Icon,
+  color,
+}) => (
   <div
     className="bg-white p-6 rounded-xl shadow-md flex items-start justify-between border-l-4"
     style={{ borderColor: color }}
@@ -33,7 +50,22 @@ const MetricCard = ({ title, value, change, icon: Icon, color }) => (
   </div>
 );
 
-const ApprovalItem = ({ id, priority, title, value, details }) => (
+// --- 2. Define Prop Types for ApprovalItem ---
+interface ApprovalItemProps {
+  id: string;
+  priority: "High-priority" | "Medium" | "Low";
+  title: string;
+  value: string;
+  details: string;
+}
+
+const ApprovalItem: React.FC<ApprovalItemProps> = ({
+  id,
+  priority,
+  title,
+  value,
+  details,
+}) => (
   <div className="flex justify-between items-start border-b p-4 hover:bg-gray-50 transition duration-150">
     <div>
       <div className="flex items-center space-x-2">
@@ -65,26 +97,41 @@ const ApprovalItem = ({ id, priority, title, value, details }) => (
   </div>
 );
 
-const OverviewItem = ({ title, value, percentage, isGoal }) => (
+// --- 3. Define Prop Types for OverviewItem ---
+interface OverviewItemProps {
+  title: string;
+  value: string | number; // Value can be a number (like 8, 12, 3) or a string ("Achieved")
+  percentage?: number; // Optional percentage
+  isGoal?: boolean; // Optional boolean
+}
+
+const OverviewItem: React.FC<OverviewItemProps> = ({
+  title,
+  value,
+  percentage,
+  isGoal,
+}) => (
   <div className="flex justify-between items-center py-3 border-b border-gray-100">
     <p className="text-gray-600">{title}</p>
     <div className="flex items-center space-x-2">
       <span className="font-semibold text-gray-800">{value}</span>
-      {isGoal && (
-        <span
-          className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-            percentage >= 80
-              ? "bg-green-100 text-green-800"
-              : "bg-yellow-100 text-yellow-800"
-          }`}
-        >
-          {percentage}%
-        </span>
-      )}
+      {isGoal &&
+        percentage !== undefined && ( // Check if isGoal is true AND percentage is provided
+          <span
+            className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+              percentage >= 80
+                ? "bg-green-100 text-green-800"
+                : "bg-yellow-100 text-yellow-800"
+            }`}
+          >
+            {percentage}%
+          </span>
+        )}
     </div>
   </div>
 );
 
+// --- 4. Main Page Component ---
 export default function ExecutiveDashboardPage() {
   return (
     <Layout title="Executive Dashboard">
@@ -165,9 +212,9 @@ export default function ExecutiveDashboardPage() {
             Today's Overview
           </h3>
           <div className="space-y-1">
-            <OverviewItem title="Pending Decisions" value="8" />
-            <OverviewItem title="Active Operations" value="12" />
-            <OverviewItem title="Team Alerts" value="3" />
+            <OverviewItem title="Pending Decisions" value={8} />
+            <OverviewItem title="Active Operations" value={12} />
+            <OverviewItem title="Team Alerts" value={3} />
             <OverviewItem
               title="Revenue Target"
               value="Achieved"

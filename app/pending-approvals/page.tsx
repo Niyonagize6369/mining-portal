@@ -1,13 +1,30 @@
-// app/pending-approvals/page.jsx
-import Layout from "@/components/Layout";
-import { FiClock, FiAlertTriangle, FiDollarSign, FiZap } from "react-icons/fi";
+// app/pending-approvals/page.tsx
+import Layout from "../components/layout";
+import React from "react"; // Import React for component typing
+import { IconType } from "react-icons"; // Type for react-icons
+import {
+  FiClock,
+  FiAlertTriangle,
+  FiDollarSign,
+  FiZap,
+  FiTruck,
+} from "react-icons/fi"; // Added FiTruck just in case, though not used here
 
-const SummaryCard = ({
+// --- 1. Define Prop Types for SummaryCard ---
+interface SummaryCardProps {
+  title: string;
+  value: string;
+  unit: string;
+  icon: IconType;
+  color: string; // The color property is unused in the provided code logic, but keeping it for completeness
+  isDanger?: boolean;
+}
+
+const SummaryCard: React.FC<SummaryCardProps> = ({
   title,
   value,
   unit,
   icon: Icon,
-  color,
   isDanger = false,
 }) => (
   <div
@@ -28,7 +45,25 @@ const SummaryCard = ({
   </div>
 );
 
-const RequisitionItem = ({
+// --- 2. Define Types for Requisition Data Structures ---
+interface RequisitionItemDetail {
+  name: string;
+  qty: number;
+  value: number;
+}
+
+interface RequisitionItemProps {
+  id: string;
+  priority: "HIGH PRIORITY" | "MEDIUM PRIORITY" | "LOW PRIORITY";
+  department: string;
+  items: RequisitionItemDetail[];
+  submitted: string;
+  stoppage: boolean;
+  value: number;
+  itemsCount: number;
+}
+
+const RequisitionItem: React.FC<RequisitionItemProps> = ({
   id,
   priority,
   department,
@@ -97,8 +132,10 @@ const RequisitionItem = ({
   </div>
 );
 
+// --- 3. Main Page Component ---
 export default function PendingApprovalsPage() {
-  const requisitions = [
+  const requisitions: RequisitionItemProps[] = [
+    // Applied type to the data array
     {
       id: "REQ-2025-001",
       priority: "HIGH PRIORITY",
